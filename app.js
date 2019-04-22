@@ -5,7 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('./config.dev');
 var mongoose=require('mongoose');
-
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
