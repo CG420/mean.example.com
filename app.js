@@ -7,7 +7,9 @@ var config = require('./config.dev');
 var mongoose=require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var LocalStrategy = require('passport-local').Strategy;
 var passport = require('passport');
+var Users = require('./models/users');
 
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
@@ -56,6 +58,7 @@ app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/api/users', apiUsersRouter);
 
+passport.use(Users.createStrategy());
 passport.serializeUser(function(user, done){
   done(null,{
     id: user._id,
