@@ -60,6 +60,9 @@ app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/api/users', apiUsersRouter);
 
+//Connect to MongoDB
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
+
 passport.use(Users.createStrategy());
 passport.serializeUser(function(user, done){
   done(null,{
