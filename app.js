@@ -10,6 +10,7 @@ var MongoStore = require('connect-mongo')(session);
 var LocalStrategy = require('passport-local').Strategy;
 var passport = require('passport');
 var Users = require('./models/users');
+var authRouter = require('./routes/auth');
 
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
@@ -79,6 +80,8 @@ passport.deserializeUser(function(user, done){
 });
 
 app.use('/api/auth', apiAuthRouter);
+
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
