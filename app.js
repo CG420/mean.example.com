@@ -83,6 +83,11 @@ app.use('/api/auth', apiAuthRouter);
 
 app.use('/auth', authRouter);
 
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
