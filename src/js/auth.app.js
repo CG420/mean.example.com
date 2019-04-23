@@ -51,6 +51,12 @@ var authApp = (function() {
         xhr.onload = function(){
           let data = JSON.parse(xhr.response);
           console.log(data);
+          if(data.success===true){
+            window.location.href = '/';
+          }else{
+            document.getElementById('formMsg').style.display='block';
+          }
+          
         }
       });
     }
