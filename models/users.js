@@ -1,21 +1,21 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
-var passportLocalMongoose = require('passport-local-mongoose'); 
+var passportLocalMongoose = require('passport-local-mongoose');
 
 //Create a schema
 var Users = new Schema({
   hash: {
     type: String,
     required: [
-      true,   
+      true,
       'There was a problem creating your password'
     ]
   },
   salt: {
     type: String,
     required: [
-      true, 
+      true,
       'There was a problem creating your password'
     ]
   },
@@ -50,9 +50,9 @@ Users.plugin(uniqueValidator);
 
 Users.plugin(passportLocalMongoose);
 
-Users.pre('save', function(next){
+Users.pre('save', function (next) {
   this.modified = new Date().toISOString();
   next();
 });
 
-module.exports  = mongoose.model('Users', Users);
+module.exports = mongoose.model('Users', Users);

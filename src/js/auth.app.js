@@ -1,37 +1,35 @@
-var authApp = (function() {
+var authApp = (function () {
 
-    function loginForm(){
-      let app = document.getElementById('app');
-  
-      let form =  `
-        <div class="card login-form">
-          <form id="loginForm" class="card-body">
-            <h1 class="card-title text-center">Please Sign In</h1>
-            <div id="formMsg" class="alert alert-danger text-center">Invalid username or password</div>
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" name="username" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" class="form-control">
-            </div>
-            <div>
-              <input type="submit" value="Sign In" class="btn btn-lg btn-primary btn-block">
-            </div>
-          </form>
-        </div>
-      `;
-  
-      app.innerHTML=form;
-    }
-  
-    //~line 29
-  function registrationForm(){
+  function loginForm() {
+    let app = document.getElementById('app');
+
+    let form = `
+      <div class="card login-form">
+        <form id="loginForm" class="card-body">
+          <h1 class="card-title text-center">Please Sign In</h1>
+          <div id="formMsg" class="alert alert-danger text-center">Invalid username or password</div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control">
+          </div>
+          <div>
+            <input type="submit" value="Sign In" class="btn btn-lg btn-primary btn-block">
+          </div>
+        </form>
+      </div>
+    `;
+
+    app.innerHTML = form;
+  }
+
+  function registrationForm() {
     var app = document.getElementById('app');
 
-    var form =  `
-
+    var form = `
         <div class="card login-form">
           <form id="registrationForm" class="card-body">
             <h1 class="card-title text-center">Create an Account</h1>
@@ -54,7 +52,7 @@ var authApp = (function() {
 
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" class="form-control" required>
+              <input type="text" id="email" name="email" class="form-control" required>
             </div>
 
             <div class="form-group">
@@ -74,49 +72,95 @@ var authApp = (function() {
         </div>
     `;
 
-    app.innerHTML=form;
+    app.innerHTML = form;
   }
 
-    function postRequest(formId, url){
-      let form = document.getElementById(formId);
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
+  function postRequest(formId, url) {
+    let form = document.getElementById(formId);
 
-        let formData = new FormData(form);
-        let uri = `${window.location.origin}${url}`;
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', uri);
+    form.addEventListener('submit', function (e) {
 
-        xhr.setRequestHeader(
-          'Content-Type',
-          'application/json; charset=UTF-8'
-        );
+      e.preventDefault();
 
-        let object = {};
-        formData.forEach(function(value, key){
-          object[key]=value;
-        });
+      let formData = new FormData(form);
+      let uri = `${window.location.origin}${url}`;
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', uri);
 
-        xhr.send(JSON.stringify(object));
-        xhr.onload = function(){
-          let data = JSON.parse(xhr.response);
-          console.log(data);
-          if(data.success===true){
-            window.location.href = '/';
-          }else{
-            document.getElementById('formMsg').style.display='block';
-          }
-          
-        }
+      xhr.setRequestHeader(
+        'Content-Type',
+        'application/json; charset=UTF-8'
+      );
+
+      let object = {};
+      formData.forEach(function (value, key) {
+        object[key] = value;
       });
-    }
-         return {
-    load: function(){
-      registrationForm();
-      postRequest('registrationForm', '/api/auth/register');
+
+      xhr.send(JSON.stringify(object));
+      xhr.onload = function () {
+        let data = JSON.parse(xhr.response);
+        if (data.success === true) {
+          window.location.href = '/';
+        } else {
+          document.getElementById('formMsg').style.display = 'block';
+        }
+      }
+    });
+  }
+
+  return {
+    load: function () {
+
+      switch (window.location.hash) {
+        case '#register':
+          registrationForm();
+          postRequest('registrationForm', '/api/auth/register');
+          validate.registrationForm();
+          break;
+
+        default:
+          loginForm();
+          postRequest('loginForm', '/api/auth/login');
+          break;
+      }
+
     }
   }
-  postRequest('loginForm', '/api/auth/login');
-  })();
-  
+
+})();
+
+var validate = (function () {
+
+  function confirmPasswordMatch() {
+
+    let pw = document.getElementById('password');
+    let cpw = document.getElementById('confirm_password');
+
+    if (pw.value !== cpw.value) {
+      cpw.setCustomValidity("Passwords do not match");
+    } else {
+      cpw.setCustomValidity("");
+    }
+
+  }
+
+  return {
+    registrationForm: function () {
+      document.querySelector('#registrationForm input[type="submit"]').addEventListener(
+        'click',
+        function () {
+          validateEmail();
+          confirmPasswordMatch();
+        });
+    }
+  }
+
+})();
+
+
+authApp.load();
+
+window.addEventListener("hashchange", function () {
   authApp.load();
+});
