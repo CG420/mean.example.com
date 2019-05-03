@@ -8,14 +8,14 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
 var Users = require('./models/users');
-
 var apiAuthRouter = require('./routes/api/auth');
 var apiUsersRouter = require('./routes/api/users');
+var apiArticlesRouter = require('./routes/api/articles');
 var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var articlesRouter = require('./routes/articles');
 
 var app = express();
 
@@ -88,14 +88,28 @@ app.use(function (req, res, next) {
   next();
 });
 
+//Set up CORS
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  } else {
+    next();
+  }
+});
+
 //session based access control
 app.use(function (req, res, next) {
-  //return next();
+  return next();
 
-  var whitelist = [
-    '/',
-    '/auth'
-  ];
+ //var whitelist = [
+   // '/',
+   // '/auth',
+   // '/articles'
+ // ];
 
   if (whitelist.indexOf(req.url) !== -1) {
     return next();
@@ -103,7 +117,8 @@ app.use(function (req, res, next) {
 
   var subs = [
     '/public/',
-    '/api/auth/'
+    '/api/auth/',
+    '/articles/'
   ];
 
   for (var sub of subs) {
@@ -123,8 +138,10 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/api/auth', apiAuthRouter);
 app.use('/api/users', apiUsersRouter);
+app.use('/api/articles', apiArticlesRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
+app.use('/articles/', articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

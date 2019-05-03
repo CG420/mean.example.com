@@ -7,17 +7,11 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var Users = new Schema({
   hash: {
     type: String,
-    required: [
-      true,
-      'There was a problem creating your password'
-    ]
+    required: [true, 'There was a problem creating your password']
   },
   salt: {
     type: String,
-    required: [
-      true,
-      'There was a problem creating your password'
-    ]
+    required: [true, 'There was a problem creating your password']
   },
   email: {
     type: String,

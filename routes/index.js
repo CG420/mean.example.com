@@ -4,7 +4,8 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {
-    title: 'Express'
+    title: 'Express',
+    name: 'Chris'
   });
 
   router.get('/logout', function (req, res) {
