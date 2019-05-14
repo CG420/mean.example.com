@@ -105,11 +105,11 @@ app.use(function(req, res, next) {
 app.use(function (req, res, next) {
   return next();
 
- //var whitelist = [
-   // '/',
-   // '/auth',
-   // '/articles'
- // ];
+ var whitelist = [
+    '/',
+    '/auth',
+    '/articles'
+ ];
 
   if (whitelist.indexOf(req.url) !== -1) {
     return next();
