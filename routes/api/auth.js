@@ -76,7 +76,7 @@ router.post('/login', function (req, res, next) {
 
 router.delete('/logout', function (req, res) {
   req.logout();
-  if (!req.session.passport.user) {
+  if (!req.session.passport) {
     return res.json({
       success: 'true'
     });
