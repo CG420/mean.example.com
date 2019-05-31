@@ -9,30 +9,31 @@ router.post('/register', function (req, res, next) {
   var data = req.body;
 
   Users.register(new Users({
-      username: data.username,
-      email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name
-    }),
-    data.password,
-    function (err, user) {
+    first_name: data.first_name,
+    last_name: data.last_name,
+    username: data.username,
+    email: data.email
+  }),
+    
+  data.password,
+  function (err, user) {
 
-      if (err) {
-
-        return res.json({
-          success: false,
-          user: req.body,
-          errors: err
-        });
-
-      }
+    if (err) {
 
       return res.json({
-        success: true,
-        user: user
+        success: false,
+        user: req.body,
+        errors: err
       });
 
+    }
+
+    return res.json({
+      success: true,
+      user: user
     });
+
+  });
 
 });
 
@@ -76,7 +77,7 @@ router.post('/login', function (req, res, next) {
 
 router.delete('/logout', function (req, res) {
   req.logout();
-  if (!req.session.passport) {
+  if (!req.session.passport.user) {
     return res.json({
       success: 'true'
     });

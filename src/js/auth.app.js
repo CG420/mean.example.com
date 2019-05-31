@@ -3,8 +3,8 @@ var authApp = (function () {
   function loginForm() {
     let app = document.getElementById('app');
 
-    let form = `
-      <div class="card login-form">
+    let form =
+      `<div class="card login-form">
         <form id="loginForm" class="card-body">
           <h1 class="card-title text-center">Please Sign In</h1>
           <div id="formMsg" class="alert alert-danger text-center">Invalid username or password</div>
@@ -20,8 +20,7 @@ var authApp = (function () {
             <input type="submit" value="Sign In" class="btn btn-lg btn-primary btn-block">
           </div>
         </form>
-      </div>
-    `;
+      </div>`;
 
     app.innerHTML = form;
   }
@@ -29,8 +28,8 @@ var authApp = (function () {
   function registrationForm() {
     var app = document.getElementById('app');
 
-    var form = `
-        <div class="card login-form">
+    var form = 
+        `<div class="card login-form">
           <form id="registrationForm" class="card-body">
             <h1 class="card-title text-center">Create an Account</h1>
             <div id="formMsg" class="alert alert-danger text-center">Your form has errors</div>
@@ -69,8 +68,7 @@ var authApp = (function () {
               <input type="submit" value="Sign In" class="btn btn-lg btn-primary btn-block">
             </div>
           </form>
-        </div>
-    `;
+        </div>`;
 
     app.innerHTML = form;
   }

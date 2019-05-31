@@ -36,20 +36,30 @@ router.get('/:userId', function (req, res) {
   });
 });
 
-router.post('/', function (req, res) {
+router.post('/', function (req, res, next) {
+  var data = req.body;
+  
   Users.create(new Users({
-    username: req.body.username,
-    email: req.body.email,
     first_name: req.body.first_name,
-    last_name: req.body.last_name
-  }), function (err, user) {
+    last_name: req.body.last_name,
+    username: req.body.username,
+    email: req.body.email
+    // hash: req.body.password
+    // salt: req.body.password
+    // password: req.body.password
+  }),
+
+  // data.password,
+  function (err, user) {
 
     if (err) {
+  
       return res.json({
         success: false,
         user: req.body,
-        error: err
+        errors: err
       });
+  
     }
 
     return res.json({
@@ -58,6 +68,7 @@ router.post('/', function (req, res) {
     });
 
   });
+
 });
 
 router.put('/', function (req, res) {
@@ -77,20 +88,20 @@ router.put('/', function (req, res) {
 
       let data = req.body;
 
-      if (data.username) {
-        user.username = data.username;
-      };
-
-      if (data.email) {
-        user.email = data.email;
-      };
-
       if (data.first_name) {
         user.first_name = data.first_name;
       };
 
       if (data.last_name) {
         user.last_name = data.last_name;
+      };
+
+      if (data.username) {
+        user.username = data.username;
+      };
+
+      if (data.email) {
+        user.email = data.email;
       };
 
       user.save(function (err) {
